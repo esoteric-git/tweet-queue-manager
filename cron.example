@@ -1,0 +1,15 @@
+# Example of cron
+
+# Open crontab
+crontab -e
+
+# Every day at 1:00 AM run run_tweet_script.app
+# This is the script that moves tweets from my apple notes to tweets.txt where they wait to get moved to the dynamodb database
+0 1 * * * open /path/to/project/run_tweet_script.app
+
+# Every day at 6:00 AM run sync_tweets.sh
+# This is the script to sync the tweets from tweets.txt to the dynamodb database
+0 6 * * * /path/to/project/venv/bin/python /path/to/project/sync_tweets.sh
+
+
+

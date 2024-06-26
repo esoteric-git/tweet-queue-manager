@@ -1,0 +1,34 @@
+
+-- Define the name of the note
+set noteName to "Tweet_Queue"
+
+-- Define the path for the output file
+set outputFile to "/your/path/to/tweets.txt"
+
+-- Define the path for the log file
+set logFile to "/your/path/to/tweet-queue.log"
+
+-- AppleScript to get the content of the note
+tell application "Notes"
+	set tweetNote to note noteName of folder "Notes"
+	set tweetContent to body of tweetNote
+end tell
+
+-- Strip HTML tags and remove the title line
+set cleanContent to do shell script "echo " & quoted form of tweetContent & " | sed 's/<[^>]*>//g' | sed -n '/Tweet_Queue/,$p' | sed '1d'"
+
+-- Write the clean content to the file
+do shell script "echo " & quoted form of cleanContent & " > " & quoted form of POSIX path of outputFile
+
+-- Get the formatted date
+set formattedDate to do shell script "date '+%a %b %d %T %Z %Y'"
+
+-- Log the completion message
+set logMessage to formattedDate & ": Note content saved to " & outputFile & linefeed
+do shell script "echo " & quoted form of logMessage & " >> " & quoted form of POSIX path of logFile
+
+
+-- Clear the body of the note except the title
+tell application "Notes"
+	set body of tweetNote to "<div><h1>Tweet_Queue</h1></div>"
+end tell
